@@ -43,9 +43,51 @@ const tubeGeo = new THREE.TubeGeometry(spline, 222, 0.65, 16, true);
 
 // create edges geometry from the spline
 const edges = new THREE.EdgesGeometry(tubeGeo, 0.2);
-const lineMat = new THREE.LineBasicMaterial({ color: 0x3d85c6 });
+const lineMat = new THREE.LineDashedMaterial({ color: 0x3d85c6 });
 const tubeLines = new THREE.LineSegments(edges, lineMat);
 scene.add(tubeLines);
+
+
+// Create glowing vertices using a custom shader
+const vertexShader = `
+varying vec3 vPosition;
+void main() {
+    vPosition = position; // Pass vertex position to fragment shader
+    gl_PointSize = 10.0; // Set size of the point
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`;
+
+const fragmentShader = `
+uniform float uTime;
+uniform vec3 uColor;
+varying vec3 vPosition;
+void main() {
+    // Compute the pulsating glow effect
+    float glow = sin(uTime + length(vPosition)) * 0.5 + 0.5;
+    gl_FragColor = vec4(uColor * glow, 1.0);
+
+    // Smooth edges for the points
+    float distanceToCenter = length(gl_PointCoord - vec2(0.5));
+    if (distanceToCenter > 0.5) discard; // Discard pixels outside a circular area
+}
+`;
+
+// Shader material for the glowing vertices
+const pointsMaterial = new THREE.ShaderMaterial({
+  vertexShader,
+  fragmentShader,
+  uniforms: {
+    uTime: { value: 0 }, // Time uniform for animations
+    uColor: { value: new THREE.Color(0x8e7cc3) }, // Glow color
+  },
+  transparent: true,
+  blending: THREE.AdditiveBlending, // Additive blending for a glowing effect
+});
+
+// Create a Points object with the custom shader
+const glowingVertices = new THREE.Points(tubeGeo, pointsMaterial);
+scene.add(glowingVertices);
 
 const numBoxes = 55;
 const size = 0.075;
@@ -77,6 +119,25 @@ for (let i = 0; i < numBoxes; i += 1) {
   scene.add(boxLines);
 }
 
+// Create torus knots with glowing effects
+const torusKnotGeo = new THREE.TorusKnotGeometry(0.03, 0.01, 50, 8);
+const torusKnotMat = new THREE.MeshStandardMaterial({
+  color: 0xff69b4,
+  emissive: 0xff69b4,
+  emissiveIntensity: 1.0,
+  roughness: 0.5,
+});
+for (let i = 0; i < 25; i++) {
+  const torusKnot = new THREE.Mesh(torusKnotGeo, torusKnotMat);
+  const p = Math.random();
+  const pos = tubeGeo.parameters.path.getPointAt(p);
+  pos.x += (Math.random() - 0.5) * 2;
+  pos.z += (Math.random() - 0.5) * 2;
+  torusKnot.position.copy(pos);
+  scene.add(torusKnot);
+}
+
+
 function updateCamera(t) {
   const time = t * 0.1;
   const looptime = 10 * 1000;
@@ -90,6 +151,7 @@ function updateCamera(t) {
 function animate(t = 0) {
   requestAnimationFrame(animate);
   updateCamera(t);
+  pointsMaterial.uniforms.uTime.value = t * 0.001;
   composer.render(scene, camera);
   controls.update();
 }
