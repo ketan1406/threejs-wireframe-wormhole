@@ -1,33 +1,9 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
-
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
-
-setupCounter(document.querySelector('#counter'))
 import * as THREE from "three";
-import { OrbitControls } from 'jsm/controls/OrbitControls.js';
 import spline from "./spline.js";
-import { EffectComposer } from "jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "jsm/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "jsm/postprocessing/UnrealBloomPass.js";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 const w = window.innerWidth;
 const h = window.innerHeight;
@@ -58,7 +34,7 @@ composer.addPass(bloomPass);
 // create a line geometry from the spline
 const points = spline.getPoints(100);
 const geometry = new THREE.BufferGeometry().setFromPoints(points);
-const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+const material = new THREE.LineBasicMaterial({ color: 0x3d85c6 });
 const line = new THREE.Line(geometry, material);
 // scene.add(line);
 
@@ -67,7 +43,7 @@ const tubeGeo = new THREE.TubeGeometry(spline, 222, 0.65, 16, true);
 
 // create edges geometry from the spline
 const edges = new THREE.EdgesGeometry(tubeGeo, 0.2);
-const lineMat = new THREE.LineBasicMaterial({ color: 0xff0000 });
+const lineMat = new THREE.LineBasicMaterial({ color: 0x3d85c6 });
 const tubeLines = new THREE.LineSegments(edges, lineMat);
 scene.add(tubeLines);
 
@@ -76,7 +52,7 @@ const size = 0.075;
 const boxGeo = new THREE.BoxGeometry(size, size, size);
 for (let i = 0; i < numBoxes; i += 1) {
   const boxMat = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
+    color: 0xff0000,
     wireframe: true
   });
   const box = new THREE.Mesh(boxGeo, boxMat);
