@@ -38,13 +38,13 @@ A captivating 3D wireframe wormhole visualization built with Three.js, showcasin
 
 ## 📂 Project Structure
 
-UIs/threejs-UI/threejs-wireframe-wormhole/
-├── LICENSE
-├── README.md
-├── index.html # Entry point of the app
-├── package.json # Project dependencies
-├── public/ # Static assets
-├── src/ # Source files
-│ ├── main.js # Main script for setting up the scene
-│ ├── spline.js # Wormhole animation logic
-├── vite.config.js # Build configuration
+      UIs/threejs-UI/threejs-wireframe-wormhole/
+      ├── LICENSE
+      ├── README.md
+      ├── index.html # Entry point of the app
+      ├── package.json # Project dependencies
+      ├── public/ # Static assets
+      ├── src/ # Source files
+      │ ├── main.js # Main script for setting up the scene
+      │ ├── spline.js # Wormhole animation logic
+      ├── vite.config.js # Build configuration
