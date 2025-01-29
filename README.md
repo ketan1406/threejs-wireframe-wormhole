@@ -48,3 +48,11 @@ A captivating 3D wireframe wormhole visualization built with Three.js, showcasin
       │ ├── main.js # Main script for setting up the scene
       │ ├── spline.js # Wormhole animation logic
       ├── vite.config.js # Build configuration
+
+## 📜 License
+
+Distributed under MIT License. See `LICENSE` for more information.
+
+## ⚡ Performance
+
+[![Lighthouse](https://img.shields.io/badge/Lighthouse-98-green?logo=lighthouse&style=flat)](https://pagespeed.web.dev/)
